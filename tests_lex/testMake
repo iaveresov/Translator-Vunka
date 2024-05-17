@@ -1,0 +1,18 @@
+CC=g++
+
+CFLAGS=-o test -lgtest -g
+
+all: lex_tests
+
+lex_tests: lex-tests.o lexer.o
+	$(CC) lex-tests.o lexer.o $(CFLAGS)
+
+lex-tests.o: lex-tests.cpp
+	$(CC) -c lex-tests.cpp
+
+lexer.o: ../lexlib/lexer.cpp
+	$(CC) -c ../lexlib/lexer.cpp
+
+.PHONY: clean
+clean:
+	rm *.o

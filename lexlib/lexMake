@@ -1,0 +1,16 @@
+CC=g++
+CFLAGS=-o test -lgtest -g
+
+all: main
+
+main: main.o lexer.o
+	$(CC) main.o lexer.o $(CFLAGS)
+
+main.o: main.cpp
+	$(CC) -g -c -s  main.cpp
+
+lexer.o: lexer.cpp
+	$(CC) -g -c -s lexer.cpp
+
+clean:
+	rm -rf *.o main
