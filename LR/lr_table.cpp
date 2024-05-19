@@ -2,6 +2,7 @@
 #ifndef lr_table_cpp
 #define lr_table_cpp
 #include<iostream>
+#include<fstream>
 #include<string>
 #include<utility>
 #include<vector>
@@ -9,287 +10,73 @@
 
 using namespace std;
 
-vector< vector< pair<string, pair<string, int> > >> tableAction = {
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 9, }}, {"opinc", { "s", 10, }}, {"id", { "s", 11, }}, {"lpar", { "s", 12, }}, {"rpar", { "err", -1, }}, {"num", { "s", 13, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "acc", -1, }}, }, 
-	{{"opor", { "s", 14, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 0, }}, }, 
-	{{"opor", { "r", 1, }}, {"opand", { "s", 15, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 1, }}, }, 
-	{{"opor", { "r", 2, }}, {"opand", { "r", 2, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 2, }}, }, 
-	{{"opor", { "r", 3, }}, {"opand", { "r", 3, }}, {"opeq", { "s", 16, }}, {"opne", { "s", 17, }}, {"opgt", { "s", 18, }}, {"oplt", { "s", 19, }}, {"ople", { "s", 20, }}, {"opplus", { "s", 21, }}, {"opminus", { "s", 22, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 3, }}, }, 
-	{{"opor", { "r", 4, }}, {"opand", { "r", 4, }}, {"opeq", { "r", 4, }}, {"opne", { "r", 4, }}, {"opgt", { "r", 4, }}, {"oplt", { "r", 4, }}, {"ople", { "r", 4, }}, {"opplus", { "r", 4, }}, {"opminus", { "r", 4, }}, {"opmul", { "s", 23, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 4, }}, }, 
-	{{"opor", { "r", 5, }}, {"opand", { "r", 5, }}, {"opeq", { "r", 5, }}, {"opne", { "r", 5, }}, {"opgt", { "r", 5, }}, {"oplt", { "r", 5, }}, {"ople", { "r", 5, }}, {"opplus", { "r", 5, }}, {"opminus", { "r", 5, }}, {"opmul", { "r", 5, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 5, }}, }, 
-	{{"opor", { "r", 6, }}, {"opand", { "r", 6, }}, {"opeq", { "r", 6, }}, {"opne", { "r", 6, }}, {"opgt", { "r", 6, }}, {"oplt", { "r", 6, }}, {"ople", { "r", 6, }}, {"opplus", { "r", 6, }}, {"opminus", { "r", 6, }}, {"opmul", { "r", 6, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 6, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "s", 10, }}, {"id", { "s", 11, }}, {"lpar", { "s", 12, }}, {"rpar", { "err", -1, }}, {"num", { "s", 13, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "s", 25, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 7, }}, {"opand", { "r", 7, }}, {"opeq", { "r", 7, }}, {"opne", { "r", 7, }}, {"opgt", { "r", 7, }}, {"oplt", { "r", 7, }}, {"ople", { "r", 7, }}, {"opplus", { "r", 7, }}, {"opminus", { "r", 7, }}, {"opmul", { "r", 7, }}, {"opnot", { "err", -1, }}, {"opinc", { "s", 26, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 7, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 35, }}, {"opinc", { "s", 36, }}, {"id", { "s", 37, }}, {"lpar", { "s", 38, }}, {"rpar", { "err", -1, }}, {"num", { "s", 39, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 8, }}, {"opand", { "r", 8, }}, {"opeq", { "r", 8, }}, {"opne", { "r", 8, }}, {"opgt", { "r", 8, }}, {"oplt", { "r", 8, }}, {"ople", { "r", 8, }}, {"opplus", { "r", 8, }}, {"opminus", { "r", 8, }}, {"opmul", { "r", 8, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 8, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 9, }}, {"opinc", { "s", 10, }}, {"id", { "s", 11, }}, {"lpar", { "s", 12, }}, {"rpar", { "err", -1, }}, {"num", { "s", 13, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 9, }}, {"opinc", { "s", 10, }}, {"id", { "s", 11, }}, {"lpar", { "s", 12, }}, {"rpar", { "err", -1, }}, {"num", { "s", 13, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 46, }}, {"opinc", { "s", 47, }}, {"id", { "s", 48, }}, {"lpar", { "s", 49, }}, {"rpar", { "err", -1, }}, {"num", { "s", 50, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 46, }}, {"opinc", { "s", 47, }}, {"id", { "s", 48, }}, {"lpar", { "s", 49, }}, {"rpar", { "err", -1, }}, {"num", { "s", 50, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 46, }}, {"opinc", { "s", 47, }}, {"id", { "s", 48, }}, {"lpar", { "s", 49, }}, {"rpar", { "err", -1, }}, {"num", { "s", 50, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 46, }}, {"opinc", { "s", 47, }}, {"id", { "s", 48, }}, {"lpar", { "s", 49, }}, {"rpar", { "err", -1, }}, {"num", { "s", 50, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 46, }}, {"opinc", { "s", 47, }}, {"id", { "s", 48, }}, {"lpar", { "s", 49, }}, {"rpar", { "err", -1, }}, {"num", { "s", 50, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 9, }}, {"opinc", { "s", 10, }}, {"id", { "s", 11, }}, {"lpar", { "s", 12, }}, {"rpar", { "err", -1, }}, {"num", { "s", 13, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 9, }}, {"opinc", { "s", 10, }}, {"id", { "s", 11, }}, {"lpar", { "s", 12, }}, {"rpar", { "err", -1, }}, {"num", { "s", 13, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 9, }}, {"opinc", { "s", 10, }}, {"id", { "s", 11, }}, {"lpar", { "s", 12, }}, {"rpar", { "err", -1, }}, {"num", { "s", 13, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 9, }}, {"opand", { "r", 9, }}, {"opeq", { "r", 9, }}, {"opne", { "r", 9, }}, {"opgt", { "r", 9, }}, {"oplt", { "r", 9, }}, {"ople", { "r", 9, }}, {"opplus", { "r", 9, }}, {"opminus", { "r", 9, }}, {"opmul", { "r", 9, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 9, }}, }, 
-	{{"opor", { "r", 10, }}, {"opand", { "r", 10, }}, {"opeq", { "r", 10, }}, {"opne", { "r", 10, }}, {"opgt", { "r", 10, }}, {"oplt", { "r", 10, }}, {"ople", { "r", 10, }}, {"opplus", { "r", 10, }}, {"opminus", { "r", 10, }}, {"opmul", { "r", 10, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 10, }}, }, 
-	{{"opor", { "r", 11, }}, {"opand", { "r", 11, }}, {"opeq", { "r", 11, }}, {"opne", { "r", 11, }}, {"opgt", { "r", 11, }}, {"oplt", { "r", 11, }}, {"ople", { "r", 11, }}, {"opplus", { "r", 11, }}, {"opminus", { "r", 11, }}, {"opmul", { "r", 11, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 11, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "s", 58, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "s", 59, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 0, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 1, }}, {"opand", { "s", 60, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 1, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 2, }}, {"opand", { "r", 2, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 2, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 3, }}, {"opand", { "r", 3, }}, {"opeq", { "s", 61, }}, {"opne", { "s", 62, }}, {"opgt", { "s", 63, }}, {"oplt", { "s", 64, }}, {"ople", { "s", 65, }}, {"opplus", { "s", 66, }}, {"opminus", { "s", 67, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 3, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 4, }}, {"opand", { "r", 4, }}, {"opeq", { "r", 4, }}, {"opne", { "r", 4, }}, {"opgt", { "r", 4, }}, {"oplt", { "r", 4, }}, {"ople", { "r", 4, }}, {"opplus", { "r", 4, }}, {"opminus", { "r", 4, }}, {"opmul", { "s", 68, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 4, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 5, }}, {"opand", { "r", 5, }}, {"opeq", { "r", 5, }}, {"opne", { "r", 5, }}, {"opgt", { "r", 5, }}, {"oplt", { "r", 5, }}, {"ople", { "r", 5, }}, {"opplus", { "r", 5, }}, {"opminus", { "r", 5, }}, {"opmul", { "r", 5, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 5, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 6, }}, {"opand", { "r", 6, }}, {"opeq", { "r", 6, }}, {"opne", { "r", 6, }}, {"opgt", { "r", 6, }}, {"oplt", { "r", 6, }}, {"ople", { "r", 6, }}, {"opplus", { "r", 6, }}, {"opminus", { "r", 6, }}, {"opmul", { "r", 6, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 6, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "s", 36, }}, {"id", { "s", 37, }}, {"lpar", { "s", 38, }}, {"rpar", { "err", -1, }}, {"num", { "s", 39, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "s", 70, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 7, }}, {"opand", { "r", 7, }}, {"opeq", { "r", 7, }}, {"opne", { "r", 7, }}, {"opgt", { "r", 7, }}, {"oplt", { "r", 7, }}, {"ople", { "r", 7, }}, {"opplus", { "r", 7, }}, {"opminus", { "r", 7, }}, {"opmul", { "r", 7, }}, {"opnot", { "err", -1, }}, {"opinc", { "s", 71, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 7, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 35, }}, {"opinc", { "s", 36, }}, {"id", { "s", 37, }}, {"lpar", { "s", 38, }}, {"rpar", { "err", -1, }}, {"num", { "s", 39, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 8, }}, {"opand", { "r", 8, }}, {"opeq", { "r", 8, }}, {"opne", { "r", 8, }}, {"opgt", { "r", 8, }}, {"oplt", { "r", 8, }}, {"ople", { "r", 8, }}, {"opplus", { "r", 8, }}, {"opminus", { "r", 8, }}, {"opmul", { "r", 8, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 8, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 12, }}, {"opand", { "s", 15, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 12, }}, }, 
-	{{"opor", { "r", 13, }}, {"opand", { "r", 13, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 13, }}, }, 
-	{{"opor", { "r", 14, }}, {"opand", { "r", 14, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "s", 73, }}, {"opminus", { "s", 74, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 14, }}, }, 
-	{{"opor", { "r", 4, }}, {"opand", { "r", 4, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 4, }}, {"opminus", { "r", 4, }}, {"opmul", { "s", 75, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 4, }}, }, 
-	{{"opor", { "r", 5, }}, {"opand", { "r", 5, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 5, }}, {"opminus", { "r", 5, }}, {"opmul", { "r", 5, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 5, }}, }, 
-	{{"opor", { "r", 6, }}, {"opand", { "r", 6, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 6, }}, {"opminus", { "r", 6, }}, {"opmul", { "r", 6, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 6, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "s", 47, }}, {"id", { "s", 48, }}, {"lpar", { "s", 49, }}, {"rpar", { "err", -1, }}, {"num", { "s", 50, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "s", 77, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 7, }}, {"opand", { "r", 7, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 7, }}, {"opminus", { "r", 7, }}, {"opmul", { "r", 7, }}, {"opnot", { "err", -1, }}, {"opinc", { "s", 78, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 7, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 35, }}, {"opinc", { "s", 36, }}, {"id", { "s", 37, }}, {"lpar", { "s", 38, }}, {"rpar", { "err", -1, }}, {"num", { "s", 39, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 8, }}, {"opand", { "r", 8, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 8, }}, {"opminus", { "r", 8, }}, {"opmul", { "r", 8, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 8, }}, }, 
-	{{"opor", { "r", 15, }}, {"opand", { "r", 15, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "s", 73, }}, {"opminus", { "s", 74, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 15, }}, }, 
-	{{"opor", { "r", 16, }}, {"opand", { "r", 16, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "s", 73, }}, {"opminus", { "s", 74, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 16, }}, }, 
-	{{"opor", { "r", 17, }}, {"opand", { "r", 17, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "s", 73, }}, {"opminus", { "s", 74, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 17, }}, }, 
-	{{"opor", { "r", 18, }}, {"opand", { "r", 18, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "s", 73, }}, {"opminus", { "s", 74, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 18, }}, }, 
-	{{"opor", { "r", 19, }}, {"opand", { "r", 19, }}, {"opeq", { "r", 19, }}, {"opne", { "r", 19, }}, {"opgt", { "r", 19, }}, {"oplt", { "r", 19, }}, {"ople", { "r", 19, }}, {"opplus", { "r", 19, }}, {"opminus", { "r", 19, }}, {"opmul", { "s", 23, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 19, }}, }, 
-	{{"opor", { "r", 20, }}, {"opand", { "r", 20, }}, {"opeq", { "r", 20, }}, {"opne", { "r", 20, }}, {"opgt", { "r", 20, }}, {"oplt", { "r", 20, }}, {"ople", { "r", 20, }}, {"opplus", { "r", 20, }}, {"opminus", { "r", 20, }}, {"opmul", { "s", 23, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 20, }}, }, 
-	{{"opor", { "r", 21, }}, {"opand", { "r", 21, }}, {"opeq", { "r", 21, }}, {"opne", { "r", 21, }}, {"opgt", { "r", 21, }}, {"oplt", { "r", 21, }}, {"ople", { "r", 21, }}, {"opplus", { "r", 21, }}, {"opminus", { "r", 21, }}, {"opmul", { "r", 21, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 21, }}, }, 
-	{{"opor", { "r", 22, }}, {"opand", { "r", 22, }}, {"opeq", { "r", 22, }}, {"opne", { "r", 22, }}, {"opgt", { "r", 22, }}, {"oplt", { "r", 22, }}, {"ople", { "r", 22, }}, {"opplus", { "r", 22, }}, {"opminus", { "r", 22, }}, {"opmul", { "r", 22, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 22, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 35, }}, {"opinc", { "s", 36, }}, {"id", { "s", 37, }}, {"lpar", { "s", 38, }}, {"rpar", { "err", -1, }}, {"num", { "s", 39, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 35, }}, {"opinc", { "s", 36, }}, {"id", { "s", 37, }}, {"lpar", { "s", 38, }}, {"rpar", { "err", -1, }}, {"num", { "s", 39, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 86, }}, {"opinc", { "s", 87, }}, {"id", { "s", 88, }}, {"lpar", { "s", 89, }}, {"rpar", { "err", -1, }}, {"num", { "s", 90, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 86, }}, {"opinc", { "s", 87, }}, {"id", { "s", 88, }}, {"lpar", { "s", 89, }}, {"rpar", { "err", -1, }}, {"num", { "s", 90, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 86, }}, {"opinc", { "s", 87, }}, {"id", { "s", 88, }}, {"lpar", { "s", 89, }}, {"rpar", { "err", -1, }}, {"num", { "s", 90, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 86, }}, {"opinc", { "s", 87, }}, {"id", { "s", 88, }}, {"lpar", { "s", 89, }}, {"rpar", { "err", -1, }}, {"num", { "s", 90, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 86, }}, {"opinc", { "s", 87, }}, {"id", { "s", 88, }}, {"lpar", { "s", 89, }}, {"rpar", { "err", -1, }}, {"num", { "s", 90, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 35, }}, {"opinc", { "s", 36, }}, {"id", { "s", 37, }}, {"lpar", { "s", 38, }}, {"rpar", { "err", -1, }}, {"num", { "s", 39, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 35, }}, {"opinc", { "s", 36, }}, {"id", { "s", 37, }}, {"lpar", { "s", 38, }}, {"rpar", { "err", -1, }}, {"num", { "s", 39, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 35, }}, {"opinc", { "s", 36, }}, {"id", { "s", 37, }}, {"lpar", { "s", 38, }}, {"rpar", { "err", -1, }}, {"num", { "s", 39, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 9, }}, {"opand", { "r", 9, }}, {"opeq", { "r", 9, }}, {"opne", { "r", 9, }}, {"opgt", { "r", 9, }}, {"oplt", { "r", 9, }}, {"ople", { "r", 9, }}, {"opplus", { "r", 9, }}, {"opminus", { "r", 9, }}, {"opmul", { "r", 9, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 9, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 10, }}, {"opand", { "r", 10, }}, {"opeq", { "r", 10, }}, {"opne", { "r", 10, }}, {"opgt", { "r", 10, }}, {"oplt", { "r", 10, }}, {"ople", { "r", 10, }}, {"opplus", { "r", 10, }}, {"opminus", { "r", 10, }}, {"opmul", { "r", 10, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 10, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 11, }}, {"opand", { "r", 11, }}, {"opeq", { "r", 11, }}, {"opne", { "r", 11, }}, {"opgt", { "r", 11, }}, {"oplt", { "r", 11, }}, {"ople", { "r", 11, }}, {"opplus", { "r", 11, }}, {"opminus", { "r", 11, }}, {"opmul", { "r", 11, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 11, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "s", 98, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 46, }}, {"opinc", { "s", 47, }}, {"id", { "s", 48, }}, {"lpar", { "s", 49, }}, {"rpar", { "err", -1, }}, {"num", { "s", 50, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 46, }}, {"opinc", { "s", 47, }}, {"id", { "s", 48, }}, {"lpar", { "s", 49, }}, {"rpar", { "err", -1, }}, {"num", { "s", 50, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 46, }}, {"opinc", { "s", 47, }}, {"id", { "s", 48, }}, {"lpar", { "s", 49, }}, {"rpar", { "err", -1, }}, {"num", { "s", 50, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 9, }}, {"opand", { "r", 9, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 9, }}, {"opminus", { "r", 9, }}, {"opmul", { "r", 9, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 9, }}, }, 
-	{{"opor", { "r", 10, }}, {"opand", { "r", 10, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 10, }}, {"opminus", { "r", 10, }}, {"opmul", { "r", 10, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 10, }}, }, 
-	{{"opor", { "r", 11, }}, {"opand", { "r", 11, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 11, }}, {"opminus", { "r", 11, }}, {"opmul", { "r", 11, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 11, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "s", 102, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 12, }}, {"opand", { "s", 60, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 12, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 13, }}, {"opand", { "r", 13, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 13, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 14, }}, {"opand", { "r", 14, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "s", 103, }}, {"opminus", { "s", 104, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 14, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 4, }}, {"opand", { "r", 4, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 4, }}, {"opminus", { "r", 4, }}, {"opmul", { "s", 105, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 4, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 5, }}, {"opand", { "r", 5, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 5, }}, {"opminus", { "r", 5, }}, {"opmul", { "r", 5, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 5, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 6, }}, {"opand", { "r", 6, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 6, }}, {"opminus", { "r", 6, }}, {"opmul", { "r", 6, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 6, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "s", 87, }}, {"id", { "s", 88, }}, {"lpar", { "s", 89, }}, {"rpar", { "err", -1, }}, {"num", { "s", 90, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "s", 107, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 7, }}, {"opand", { "r", 7, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 7, }}, {"opminus", { "r", 7, }}, {"opmul", { "r", 7, }}, {"opnot", { "err", -1, }}, {"opinc", { "s", 108, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 7, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 35, }}, {"opinc", { "s", 36, }}, {"id", { "s", 37, }}, {"lpar", { "s", 38, }}, {"rpar", { "err", -1, }}, {"num", { "s", 39, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 8, }}, {"opand", { "r", 8, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 8, }}, {"opminus", { "r", 8, }}, {"opmul", { "r", 8, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 8, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 15, }}, {"opand", { "r", 15, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "s", 103, }}, {"opminus", { "s", 104, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 15, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 16, }}, {"opand", { "r", 16, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "s", 103, }}, {"opminus", { "s", 104, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 16, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 17, }}, {"opand", { "r", 17, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "s", 103, }}, {"opminus", { "s", 104, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 17, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 18, }}, {"opand", { "r", 18, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "s", 103, }}, {"opminus", { "s", 104, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 18, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 19, }}, {"opand", { "r", 19, }}, {"opeq", { "r", 19, }}, {"opne", { "r", 19, }}, {"opgt", { "r", 19, }}, {"oplt", { "r", 19, }}, {"ople", { "r", 19, }}, {"opplus", { "r", 19, }}, {"opminus", { "r", 19, }}, {"opmul", { "s", 68, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 19, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 20, }}, {"opand", { "r", 20, }}, {"opeq", { "r", 20, }}, {"opne", { "r", 20, }}, {"opgt", { "r", 20, }}, {"oplt", { "r", 20, }}, {"ople", { "r", 20, }}, {"opplus", { "r", 20, }}, {"opminus", { "r", 20, }}, {"opmul", { "s", 68, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 20, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 21, }}, {"opand", { "r", 21, }}, {"opeq", { "r", 21, }}, {"opne", { "r", 21, }}, {"opgt", { "r", 21, }}, {"oplt", { "r", 21, }}, {"ople", { "r", 21, }}, {"opplus", { "r", 21, }}, {"opminus", { "r", 21, }}, {"opmul", { "r", 21, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 21, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 22, }}, {"opand", { "r", 22, }}, {"opeq", { "r", 22, }}, {"opne", { "r", 22, }}, {"opgt", { "r", 22, }}, {"oplt", { "r", 22, }}, {"ople", { "r", 22, }}, {"opplus", { "r", 22, }}, {"opminus", { "r", 22, }}, {"opmul", { "r", 22, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 22, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 19, }}, {"opand", { "r", 19, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 19, }}, {"opminus", { "r", 19, }}, {"opmul", { "s", 75, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 19, }}, }, 
-	{{"opor", { "r", 20, }}, {"opand", { "r", 20, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 20, }}, {"opminus", { "r", 20, }}, {"opmul", { "s", 75, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 20, }}, }, 
-	{{"opor", { "r", 21, }}, {"opand", { "r", 21, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 21, }}, {"opminus", { "r", 21, }}, {"opmul", { "r", 21, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 21, }}, }, 
-	{{"opor", { "r", 22, }}, {"opand", { "r", 22, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 22, }}, {"opminus", { "r", 22, }}, {"opmul", { "r", 22, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "err", -1, }}, {"num", { "err", -1, }}, {"correct", { "r", 22, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 86, }}, {"opinc", { "s", 87, }}, {"id", { "s", 88, }}, {"lpar", { "s", 89, }}, {"rpar", { "err", -1, }}, {"num", { "s", 90, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 86, }}, {"opinc", { "s", 87, }}, {"id", { "s", 88, }}, {"lpar", { "s", 89, }}, {"rpar", { "err", -1, }}, {"num", { "s", 90, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "s", 86, }}, {"opinc", { "s", 87, }}, {"id", { "s", 88, }}, {"lpar", { "s", 89, }}, {"rpar", { "err", -1, }}, {"num", { "s", 90, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 9, }}, {"opand", { "r", 9, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 9, }}, {"opminus", { "r", 9, }}, {"opmul", { "r", 9, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 9, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 10, }}, {"opand", { "r", 10, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 10, }}, {"opminus", { "r", 10, }}, {"opmul", { "r", 10, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 10, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 11, }}, {"opand", { "r", 11, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 11, }}, {"opminus", { "r", 11, }}, {"opmul", { "r", 11, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 11, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "err", -1, }}, {"opand", { "err", -1, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "err", -1, }}, {"opminus", { "err", -1, }}, {"opmul", { "err", -1, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "s", 113, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 19, }}, {"opand", { "r", 19, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 19, }}, {"opminus", { "r", 19, }}, {"opmul", { "s", 105, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 19, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 20, }}, {"opand", { "r", 20, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 20, }}, {"opminus", { "r", 20, }}, {"opmul", { "s", 105, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 20, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 21, }}, {"opand", { "r", 21, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 21, }}, {"opminus", { "r", 21, }}, {"opmul", { "r", 21, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 21, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-	{{"opor", { "r", 22, }}, {"opand", { "r", 22, }}, {"opeq", { "err", -1, }}, {"opne", { "err", -1, }}, {"opgt", { "err", -1, }}, {"oplt", { "err", -1, }}, {"ople", { "err", -1, }}, {"opplus", { "r", 22, }}, {"opminus", { "r", 22, }}, {"opmul", { "r", 22, }}, {"opnot", { "err", -1, }}, {"opinc", { "err", -1, }}, {"id", { "err", -1, }}, {"lpar", { "err", -1, }}, {"rpar", { "r", 22, }}, {"num", { "err", -1, }}, {"correct", { "err", -1, }}, }, 
-};
+vector< vector< pair<string, pair<string, int> > >> tableAction = {};
+void initTableAction(){
+	ifstream fin("tableAction.txt");
+	int n;
+	fin >> n;
+	tableAction.reserve(n);
+	for (int i = 0; i < n; ++i)
+	{
+		int k;
+		fin >> k;
+		vector< pair<string, pair<string, int> > > tmp;
+		tmp.reserve(k);
+		for (int j = 0; j < k; ++j)
+		{
+			string token, action;
+			int code;
+			fin >> token >> action >> code;
+			tmp.push_back({token, {action, code}});
+		}
+		tableAction.push_back(tmp);
+	}
+}
 
-vector< vector< pair<string, int> > > gotoTable = {
-	{{"S", -1}, {"E", 1}, {"E7", 2}, {"E6", 3}, {"E5", 4}, {"E4", 5}, {"E3", 6}, {"E2", 7}, {"E1", 8}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", 24}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", 27}, {"E7", 28}, {"E6", 29}, {"E5", 30}, {"E4", 31}, {"E3", 32}, {"E2", 33}, {"E1", 34}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", 40}, {"E5", 4}, {"E4", 5}, {"E3", 6}, {"E2", 7}, {"E1", 8}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", 41}, {"E4", 5}, {"E3", 6}, {"E2", 7}, {"E1", 8}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", 42}, {"E3", 43}, {"E2", 44}, {"E1", 45}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", 51}, {"E3", 43}, {"E2", 44}, {"E1", 45}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", 52}, {"E3", 43}, {"E2", 44}, {"E1", 45}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", 53}, {"E3", 43}, {"E2", 44}, {"E1", 45}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", 54}, {"E3", 43}, {"E2", 44}, {"E1", 45}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", 55}, {"E2", 7}, {"E1", 8}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", 56}, {"E2", 7}, {"E1", 8}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", 57}, {"E1", 8}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", 69}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", 72}, {"E7", 28}, {"E6", 29}, {"E5", 30}, {"E4", 31}, {"E3", 32}, {"E2", 33}, {"E1", 34}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", 76}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", 79}, {"E7", 28}, {"E6", 29}, {"E5", 30}, {"E4", 31}, {"E3", 32}, {"E2", 33}, {"E1", 34}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", 80}, {"E5", 30}, {"E4", 31}, {"E3", 32}, {"E2", 33}, {"E1", 34}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", 81}, {"E4", 31}, {"E3", 32}, {"E2", 33}, {"E1", 34}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", 82}, {"E3", 83}, {"E2", 84}, {"E1", 85}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", 91}, {"E3", 83}, {"E2", 84}, {"E1", 85}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", 92}, {"E3", 83}, {"E2", 84}, {"E1", 85}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", 93}, {"E3", 83}, {"E2", 84}, {"E1", 85}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", 94}, {"E3", 83}, {"E2", 84}, {"E1", 85}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", 95}, {"E2", 33}, {"E1", 34}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", 96}, {"E2", 33}, {"E1", 34}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", 97}, {"E1", 34}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", 99}, {"E2", 44}, {"E1", 45}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", 100}, {"E2", 44}, {"E1", 45}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", 101}, {"E1", 45}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", 106}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", 109}, {"E7", 28}, {"E6", 29}, {"E5", 30}, {"E4", 31}, {"E3", 32}, {"E2", 33}, {"E1", 34}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", 110}, {"E2", 84}, {"E1", 85}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", 111}, {"E2", 84}, {"E1", 85}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", 112}, {"E1", 85}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-	{{"S", -1}, {"E", -1}, {"E7", -1}, {"E6", -1}, {"E5", -1}, {"E4", -1}, {"E3", -1}, {"E2", -1}, {"E1", -1}, }, 
-};
+vector< vector< pair<string, int> > > gotoTable = {};
+void initGotoTable(){
+	ifstream fin("gotoTable.txt");
+	int n;
+	fin >> n;
+	gotoTable.reserve(n);
+	for (int i = 0; i < n; ++i)
+	{
+		int k;
+		fin >> k;
+		vector< pair<string, int> > tmp;
+		tmp.reserve(k);
+		for (int j = 0; j < k; ++j)
+		{
+			string rule;
+			int state;
+			fin >> rule >> state;
+			tmp.push_back({rule, state});
+		}
+		gotoTable.push_back(tmp);
+	}
+}
 
-vector< pair< string, vector<string> > > reduceRules = {
-	{"E", 
-		{ "E7", }}, 
-	{"E7", 
-		{ "E6", }}, 
-	{"E6", 
-		{ "E5", }}, 
-	{"E5", 
-		{ "E4", }}, 
-	{"E4", 
-		{ "E3", }}, 
-	{"E3", 
-		{ "E2", }}, 
-	{"E2", 
-		{ "E1", }}, 
-	{"E1", 
-		{ "id", }}, 
-	{"E1", 
-		{ "num", }}, 
-	{"E2", 
-		{ "opnot", "E1", }}, 
-	{"E1", 
-		{ "opinc", "id", }}, 
-	{"E1", 
-		{ "id", "opinc", }}, 
-	{"E7", 
-		{ "E7", "opor", "E6", }}, 
-	{"E6", 
-		{ "E6", "opand", "E5", }}, 
-	{"E5", 
-		{ "E4", "opeq", "E4", }}, 
-	{"E5", 
-		{ "E4", "opne", "E4", }}, 
-	{"E5", 
-		{ "E4", "opgt", "E4", }}, 
-	{"E5", 
-		{ "E4", "oplt", "E4", }}, 
-	{"E5", 
-		{ "E4", "ople", "E4", }}, 
-	{"E4", 
-		{ "E4", "opplus", "E3", }}, 
-	{"E4", 
-		{ "E4", "opminus", "E3", }}, 
-	{"E3", 
-		{ "E3", "opmul", "E2", }}, 
-	{"E1", 
-		{ "lpar", "E", "rpar", }}, 
-};
+vector< pair< string, vector<string> > > reduceRules = {};
+void initReduceRules(){
+	ifstream fin("reduceRules.txt");
+	int n;
+	fin >> n;
+	reduceRules.reserve(n);
+	for (int i = 0; i < n; ++i)
+	{
+		string rule;
+		int k;
+		fin >> rule >> k;
+		vector< string> tmp;
+		tmp.reserve(k);
+		for (int j = 0; j < k; ++j)
+		{
+			string token;
+			fin >> token;
+			tmp.push_back(token);
+		}
+		reduceRules.push_back({rule, tmp});
+	}
+}
 
 #endif

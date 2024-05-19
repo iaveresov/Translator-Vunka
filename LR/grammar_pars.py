@@ -135,24 +135,6 @@ def goto(I, X):
 
 
 
-if path.exists("lr_table.cpp"):
-    wf = open("lr_table.cpp", "w")
-else:
-    wf = open("lr_table.cpp", "x")
-
-#generation .h file
-wf.write("#pragma once\n")
-wf.write("#ifndef lr_table_cpp\n")
-wf.write("#define lr_table_cpp\n")
-wf.write("#include<iostream>" + "\n")
-wf.write("#include<string>" + "\n")
-wf.write("#include<utility>" + "\n")
-wf.write("#include<vector>" + "\n")
-wf.write("#include<map>")
-wf.write("\n\n")
-wf.write("using namespace std;")
-wf.write("\n\n")
-
 #generation tables and rules for reduce
 table_action = [dict({})]
 table_goto = [dict({})]
@@ -223,38 +205,28 @@ print("---------------------------------------")
 
 
 #write table ACTION in cpp file
-wf.write("vector< vector< pair<string, pair<string, int> > >> tableAction = {" + '\n')
-for string in table_action:
-    wf.write("\t" + "{")
-    for char in string.keys():
-        wf.write("{" + f'"{char}", ' + "{ ")
-        for act in string[char]:
-            if type(act) == str:
-                wf.write(f'"{act}", ')
-            else:
-                wf.write(f'{act}, ')
-        wf.write("}}, ")
-    wf.write("}, " + '\n')
-wf.write("};" +'\n\n')
+with open("tableAction.txt", "w") as wf:
+    print(len(table_action), file=wf)
+    for string in table_action:
+        print(len(string), file=wf, end=" ")
+        for char in string.keys():
+            print(char, *string[char], file=wf, end=" ")
+        print(file=wf)
 
 #write table GOTO in cpp file
-wf.write("vector< vector< pair<string, int> > > gotoTable = {\n")
-for string in table_goto:
-    wf.write("\t" + "{")
-    for char in string.keys():
-        wf.write("{" + f'"{char}", ' + f'{string[char]}' + "}, ")
-    wf.write("}, " + '\n')
-wf.write("};" + '\n\n')
+with open("gotoTable.txt", "w") as wf:
+    print(len(table_goto), file=wf)
+    for string in table_goto:
+        print(len(string), file=wf, end=" ")
+        for char in string.keys():
+            print(char, string[char], file=wf, end=" ")
+        print(file=wf)
 
 #write reduce rules in cpp file
-wf.write("vector< pair< string, vector<string> > > reduceRules = {\n")
-for rule in reduce_rules:
-    wf.write('\t' + "{" + f'"{rule[0]}", ' + '\n\t\t' + "{ ")
-    for char in rule[1]:
-        wf.write(f'"{char}", ')
-    wf.write("}}, " + '\n')
-wf.write("};" + '\n\n')
-wf.write("#endif")
+with open("reduceRules.txt", "w") as wf:
+    print(len(reduce_rules), file=wf)
+    for rule in reduce_rules:
+        print(rule[0], len(rule[1]), *rule[1], file=wf)
 
 print(len(items))
 print(len(table_action))

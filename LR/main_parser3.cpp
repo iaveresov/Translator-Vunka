@@ -170,6 +170,10 @@ Node* make_tree(){
 
 
 int main(){
+	initTableAction();
+	initGotoTable();
+	initReduceRules();
+	
 	Node* root = make_tree();
 	print(root);
 	return 0;
