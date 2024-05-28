@@ -601,6 +601,7 @@ int main(){
 	symtab.addVar("b", -1, SymbType::Int);
 	symtab.addVar("c", -1, SymbType::Int);
 	symtab.addVar("d", -1 , SymbType::Int);
+	symtab.addFunc("func", SymbType::Int);
 	cout << "-----------------------------------------------" << '\n';
 	generateAtoms(root);
 	cout << "-----------------------------------------------" << '\n';
