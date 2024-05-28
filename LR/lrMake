@@ -3,13 +3,16 @@ CFLAGS=-o
 
 all: main_parser3
 
-main_parser3: main_parser3.o lexer.o
+main_parser3: main_parser3.o lexer.o symboltable.o
 
 main_parser3.o: main_parser3.cpp
 	$(CC) -c main_parser3.cpp
 
 lexer.o: ../lexlib/lexer.cpp
 	$(CC) -c ../lexlib/lexer.cpp
+
+symboltable.o:
+	$(CC) -c ./symtable/symboltable.cpp
 
 .PHONY: clean
 clean:
