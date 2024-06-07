@@ -50,9 +50,11 @@ class SymbolTable{
 
 		int checkFunc(string name, int len);
 
-		int addVar(string name, int scope, SymbType type, int init = 0);
+		int addVar(string name, int scope, SymbType type,  string init="");
 
 		int addFunc(string name, SymbType type );
+		
+		void set_len(int n, int scope);
 
 		void print_table();
 

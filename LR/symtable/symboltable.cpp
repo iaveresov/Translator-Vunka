@@ -38,11 +38,11 @@ int SymbolTable::checkFunc(string name, int len){
 	return ptr->second->code;
 }
 
-int SymbolTable::addVar(string name, int scope, SymbType type, int init){
+int SymbolTable::addVar(string name, int scope, SymbType type, string init){
 	int var_code = checkVar(GLOBAL_SCOPE, name);
 	int func_code = checkFunc(name, 0);
 	if(var_code == -1 and func_code == -1){
-		SymbolData* new_string = new SymbolData{max_code++, SymbKind::var, SymbType::Int, to_string(init), scope};
+		SymbolData* new_string = new SymbolData{max_code++, SymbKind::var, type, init, scope};
 		symtable[name] = new_string;
 		return symtable[name]->code;	
 	}
@@ -58,6 +58,15 @@ int SymbolTable::addFunc(string name, SymbType type){
 		return symtable[name]->code;
 	}
 	return -1;
+}
+
+void SymbolTable::set_len(int n, int scope){
+	for(auto& [name, data]: symtable){
+		if(data->code == scope){
+			data->len = n;
+		}
+	}
+	
 }
 
 void SymbolTable::print_table(){

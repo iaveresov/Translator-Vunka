@@ -1,4 +1,12 @@
-34
+60
+StmtList 1 epsilon
+Stmt 1 DeclareStmt
+Stmt 1 IfOp
+Stmt 1 semicolon
+Type 1 kwint
+Type 1 kwchar
+StmtList 2 Stmt StmtList
+DeclVarList' 1 epsilon
 E 1 E7
 E7' 1 epsilon
 E6' 1 epsilon
@@ -8,6 +16,9 @@ E3' 1 epsilon
 E2 1 E1
 E1 1 num
 E1' 1 epsilon
+DeclareStmt 3 Type id DeclareStmt'
+ParamList 1 epsilon
+Stmt 3 kwreturn E semicolon
 E7 2 E6 E7'
 E6 2 E5 E6'
 E5 2 E4 E5'
@@ -18,6 +29,9 @@ E1 2 opinc id
 E1 2 id E1'
 ArgList 1 epsilon
 E1' 1 opinc
+Stmt 3 lbrace StmtList rbrace
+DeclareStmt' 2 DeclVarList' semicolon
+InitVar 1 epsilon
 E5' 2 opeq E4
 E5' 2 opne E4
 E5' 2 opgt E4
@@ -25,6 +39,8 @@ E5' 2 oplt E4
 E5' 2 ople E4
 E1 3 lpar E rpar
 ArgList' 1 epsilon
+ParamList' 1 epsilon
+DeclareStmt' 3 opassign char DeclVarList'
 E7' 3 opor E6 E7'
 E6' 3 opand E5 E6'
 E4' 3 opplus E3 E4'
@@ -32,4 +48,14 @@ E4' 3 opminus E3 E4'
 E3' 3 opmul E2 E3'
 ArgList 2 E ArgList'
 E1' 3 lpar ArgList rpar
+ElsePart 1 epsilon
+ParamList 3 Type id ParamList'
+DeclVarList' 4 comma id InitVar DeclVarList'
+InitVar 2 opassign num
+InitVar 2 opassign char
+DeclareStmt' 4 opassign num DeclVarList' semicolon
+IfOp 6 kwif lpar E rpar Stmt ElsePart
 ArgList' 3 comma E ArgList'
+ElsePart 2 kwelse Stmt
+DeclareStmt' 6 lpar ParamList rpar lbrace StmtList rbrace
+ParamList' 4 comma Type id ParamList'

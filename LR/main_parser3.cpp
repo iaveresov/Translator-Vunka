@@ -441,6 +441,349 @@ void generateAtoms(Node* node){
 		
 		node->atr.push_back(++m);
 	}
+	else if(node->value.first == "StmtList"){
+		if(IsEpsBorn(node)){
+			return;
+		}
+
+		Node* Stmt = node->childs[0];
+		Node* StmtList = node->childs[1];
+		
+		Stmt->scope = node->scope;
+		StmtList->scope = node->scope;
+		
+		generateAtoms(Stmt);
+		generateAtoms(StmtList);
+	}
+	else if(node->value.first == "Stmt"){
+		if(node->childs[0]->value.first == "lbrace"){
+			if(node->scope == -1){
+				throw "error (operator must be inside function)";
+			}
+
+			Node* StmtList = node->childs[1];
+			StmtList->scope = node->scope;
+			generateAtoms(StmtList);
+		 
+		}
+		else if(node->childs[0]->value.first == "semicolon"){
+		 	return;
+		}
+		else if(node->childs[0]->value.first =="kwreturn"){
+			Node* E = node->childs[1];
+			E->scope = node->scope;
+			
+			if(node->scope == -1){
+				throw "error (operator must be inside function)";
+			}
+
+			generateAtoms(E);
+			int p = E->atr[0];
+			cout << "<" << "RET" << ", " << ", " << p << ">" << '\n' ; 
+			return;
+		
+		
+		}
+		else if(node->childs[0]->value.first == "DeclareStmt"){
+			Node* DeclareStmt = node->childs[0];
+			generateAtoms(DeclareStmt);
+			return;
+		}
+		else{
+			if(node->scope == -1){
+				cout << node->childs[0]->value.first << '\n';
+				throw "error (operator must be inside function)";
+
+			}
+			
+			Node* Op = node->childs[0];	
+			Op->scope = node->scope;
+			generateAtoms(Op);
+			return;
+		}
+	
+	}else if(node->value.first == "DeclareStmt"){
+		Node* Type =  node->childs[0];
+		Node* id = node->childs[1];
+		Node* DeclareStmt_ = node->childs[2];
+		
+		Type->scope = node->scope;
+		string id_name = id->value.second;		
+		DeclareStmt_->scope = node->scope;
+		
+		generateAtoms(Type);
+		string p = Type->satr[0];
+		DeclareStmt_->satr.push_back(p);
+		DeclareStmt_->satr.push_back(id_name);
+		generateAtoms(DeclareStmt_);
+		return;
+	}
+	else if(node->value.first ==  "DeclareStmt'"){
+		if(node->childs[0]->value.first == "opassign"){
+			string p = node->satr[0];
+			string q = node->satr[1];
+			SymbType type;
+
+
+			if(p == "int"){
+				type = SymbType::Int;
+			}
+			else if(p == "char"){
+				type = SymbType::Char;
+			}
+			Node* num = node->childs[1];
+			Node* DeclVarList_ = node->childs[2];
+
+			string num_val = num->value.second;
+			string value = num_val;
+			symtab.addVar(q, node->scope, type, value);
+			DeclVarList_->satr.push_back(p);
+			DeclVarList_->scope = node->scope;
+			generateAtoms(DeclVarList_);
+			return;
+		}	
+		else if(node->childs[0]->value.first == "DeclVarList'"){
+			Node* DeclVarList_ = node->childs[0];
+			DeclVarList_->scope = node->scope;
+			
+			string p = node->satr[0];
+			string q = node->satr[1];
+			SymbType type;
+
+			if(p == "int"){
+				 type = SymbType::Int;
+			}else if(p == "char"){
+				type = SymbType::Char;	
+			}
+			
+			symtab.addVar(q, node->scope, type);
+			
+			DeclVarList_->satr.push_back(p);
+			generateAtoms(DeclVarList_);
+			return;
+		
+		}else if(node->childs[0]->value.first == "lpar"){
+			
+			string p = node->satr[0];
+			string q = node->satr[1];
+			SymbType type;
+			int scope_;
+
+			if(p == "int"){
+				 type = SymbType::Int;
+			}else if(p == "char"){
+				type = SymbType::Char;	
+			}		 
+			
+			if(node->scope != -1){
+				throw  "error (functon definition inside function)";
+			}
+			else{
+				scope_ = symtab.addFunc(q, type);
+			
+			}
+
+			Node* ParamList = node->childs[1];
+			Node* StmtList = node->childs[4];
+			
+			ParamList->scope = scope_;
+			StmtList->scope = scope_;
+			
+			generateAtoms(ParamList);
+			int n = ParamList->atr[0];
+			symtab.set_len(n, scope_);
+			generateAtoms(StmtList);
+			
+			cout << "<" << "RET" << ", " << ", " << "0" << ">" << '\n' ; 
+			
+		
+		}
+		else if(node->value.first == "DeclVarList'"){
+			if(node->childs[0]->value.first == "comma"){
+				Node* id = node->childs[1];
+				Node* InitVar = node->childs[2];
+				Node* DeclVarList_ = node->childs[3];
+
+				string id_name = id->value.second;
+				InitVar->scope = node->scope;
+				DeclVarList_->scope = node->scope;
+				
+				string p = node->satr[0];
+				InitVar->satr.push_back(p);
+				InitVar->satr.push_back(id_name);
+				generateAtoms(InitVar);
+				
+				DeclVarList_->satr.push_back(p);
+				generateAtoms(DeclVarList_);
+				return;
+			}
+			else if(IsEpsBorn(node)){
+				return;
+			}
+		
+		}
+			
+	
+	}
+	else if(node->value.first == "InitVar"){
+		
+		string p = node->satr[0];
+		string q = node->satr[1];
+		SymbType type;
+
+		if(p == "int"){
+			type = SymbType::Int;
+			
+		}
+		else if(p == "char"){
+			type = SymbType::Char;
+		}
+
+
+		if(IsEpsBorn(node)){	
+			symtab.addVar(q, node->scope, type);
+			return;
+		}
+		else{
+			Node* int_t = node->childs[1];
+			string int_t_val = int_t->value.second;
+			symtab.addVar(q, node->scope, type, int_t_val );
+
+		}	
+
+	
+	}
+	else if(node->value.first == "Type"){
+		if(node->childs[0]->value.first == "kwint"){
+			node->satr.push_back("int");
+		
+		}else if(node->childs[0]->value.first == "kwchar"){
+			 node->satr.push_back("char");
+		
+		}
+	
+	}
+	else if(node->value.first == "DeclVarList'"){
+		if(IsEpsBorn(node)){
+			return;
+		}
+
+		string p = node->satr[0];
+
+		Node* id = node->childs[1];
+		string id_name = id->value.second;
+		
+		Node* InitVar = node->childs[2];
+		Node* DeclVarList_ = node->childs[3];
+		
+		InitVar->scope = node->scope;
+		DeclVarList_->scope = node->scope;
+		
+		InitVar->satr.push_back(p);
+		InitVar->satr.push_back(id_name);
+		generateAtoms(InitVar);
+
+		DeclVarList_->satr.push_back(p);	
+		generateAtoms(DeclVarList_);
+		return;
+	}
+	else if(node->value.first == "ParamList"){
+		if(IsEpsBorn(node)){
+			int n = 0;
+			node->atr.push_back(n);
+			return;
+		}
+		
+		
+		Node* Type = node->childs[0];
+		Node* id = node->childs[1];
+		Node* ParamList_ = node->childs[2];
+
+		Type->scope = node->scope;
+		string id_name = id->value.second;
+		ParamList_->scope = node->scope;
+		SymbType type;
+
+		generateAtoms(Type);
+		string q = Type->satr[0];
+		if(q == "int"){
+			type = SymbType::Int;
+		}
+		else if(q == "char"){
+			type =SymbType::Char;
+		}
+		
+		symtab.addVar(id_name, node->scope, type);
+		generateAtoms(ParamList_);
+		int s = ParamList_->atr[0];
+		node->atr.push_back(++s);
+		return;
+	}	
+	else if(node->value.first == "ParamList'"){
+		if(IsEpsBorn(node)){
+			int n = 0;
+			node->atr.push_back(n);
+			return;
+		}
+
+		Node* Type = node->childs[1];
+		Node* id = node->childs[2];
+		Node* ParamList_ = node->childs[3];
+
+		Type->scope = node->scope;
+		string id_name = id->value.second;
+		ParamList_->scope = node->scope;
+		SymbType type;
+
+		generateAtoms(Type);
+		string q = Type->satr[0];
+		if(q == "int"){
+			type = SymbType::Int;
+		}
+		else if(q == "char"){
+			type =SymbType::Char;
+		}
+		
+		symtab.addVar(id_name, node->scope, type);
+		generateAtoms(ParamList_);
+		int s = ParamList_->atr[0];
+		node->atr.push_back(++s);
+		return;		
+		
+	}else if(node->value.first == "IfOp"){
+		Node* E = node->childs[2];
+		Node* Stmt = node->childs[4];
+		Node* ElsePart = node->childs[5];
+		
+		E->scope = node->scope;
+		Stmt->scope = node->scope;
+		ElsePart->scope = node->scope;
+
+		generateAtoms(E);
+		int p = E->atr[0];
+		int l1 = new_label++;
+		cout << "<" <<  "EQ" << " , " << p << ", " << "0 " << ", " << l1 << ">" << '\n';
+		
+		generateAtoms(Stmt);
+
+		int l2 = new_label++;
+		cout << "<" << "JMP" <<" , " << ", " << l2 << ">" << '\n';;
+		cout << "<" << "LBL" << " , " << ", " << l1 << ">" << '\n';
+		
+		generateAtoms(ElsePart);
+		cout << "<" << "LBL" << " , " << ", " << l2 << ">" << '\n';
+
+	}
+	else if(node->value.first == "ElsePart"){
+		if(IsEpsBorn(node)){
+			return;
+		}
+
+		Node* Stmt = node->childs[1];
+		Stmt->scope = node->scope;
+		generateAtoms(Stmt);
+		return;
+	}	
 
 	return;	
 }
@@ -597,11 +940,6 @@ int main(){
 	
 	Node* root = make_tree();
 	print(root);
-	symtab.addVar("a", -1, SymbType::Int);
-	symtab.addVar("b", -1, SymbType::Int);
-	symtab.addVar("c", -1, SymbType::Int);
-	symtab.addVar("d", -1 , SymbType::Int);
-	symtab.addFunc("func", SymbType::Int);
 	cout << "-----------------------------------------------" << '\n';
 	generateAtoms(root);
 	cout << "-----------------------------------------------" << '\n';
